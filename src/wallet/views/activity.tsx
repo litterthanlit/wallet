@@ -50,7 +50,7 @@ export function ActivityView() {
 
   return (
     <div className="flex flex-col">
-      <h1 className={`text-title font-medium text-ink mono:font-normal ${caps}`}>Activity</h1>
+      <h1 className="text-title font-medium text-ink">Activity</h1>
 
       <dl className="mt-5 grid grid-cols-2 gap-2">
         <Stat label="Money in" value={money(moneyIn)} />
@@ -129,9 +129,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)] mono:rounded-[22px] mono:bg-surface mono:px-4 mono:py-4">
       <dt className={`text-meta text-muted ${caps}`}>{label}, 30 days</dt>
-      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-3 mono:text-title mono:font-normal">
-        {value}
-      </dd>
+      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-2 mono:text-title">{value}</dd>
     </div>
   );
 }

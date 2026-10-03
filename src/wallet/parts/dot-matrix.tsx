@@ -2,7 +2,9 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { useTheme } from "@/components/ui/theme-toggle";
 
 /** Delay between neighbouring columns as a new set of levels rolls in, ms. */
-const STAGGER = 4;
+const STAGGER = 8;
+/** Points per column: two keeps the dots large enough to read as marks, not texture. */
+const GROUP = 2;
 const DURATION = 420;
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
 
@@ -14,11 +16,11 @@ type DotMatrixProps = {
 };
 
 /**
- * Columns of LEDs, after the Nothing OS widgets. Square grid, one column per
- * point; unlit dots stay faintly visible so it reads as a panel. Lit counts
- * are whole numbers, so a change steps dot by dot in a wave from the left
- * rather than sliding. The latest column carries the red signal dot; while
- * scrubbing, the future dims and the scrubbed column takes the dot.
+ * Columns of dots, one per pair of points, on a square grid with nothing
+ * drawn above the value. At rest older columns fade back so the recent run
+ * leads; the latest column carries the red dot. While scrubbing, the past is
+ * solid, the future drops away and the scrubbed column takes the dot. Counts
+ * are whole dots, so a change steps up in a wave from the left.
  * Decorative: the slider around it carries the value.
  */
 export function DotMatrix({ levels, active }: DotMatrixProps) {
@@ -41,22 +43,22 @@ export function DotMatrix({ levels, active }: DotMatrixProps) {
     if (!el || !ctx || !size.w || !cols) return;
     const pitch = size.w / cols;
     const rows = Math.max(1, Math.floor(size.h / pitch));
-    const r = pitch * 0.32;
-    const signal = active ?? cols - 1;
+    const r = Math.min(3, pitch * 0.27);
+    const current = active === null ? null : Math.floor(active / GROUP);
+    const signal = current ?? cols - 1;
 
     ctx.setTransform(size.dpr, 0, 0, size.dpr, 0, 0);
     ctx.clearRect(0, 0, size.w, size.h);
     for (let i = 0; i < cols; i++) {
       const lit = Math.max(1, Math.round(levelAt(i, now) * rows));
-      const alpha = active === null ? 0.72 : i === active ? 1 : i < active ? 0.72 : 0.16;
+      const alpha = current === null ? 0.2 + 0.7 * (i / (cols - 1)) : i === current ? 1 : i < current ? 0.8 : 0.12;
       const x = (i + 0.5) * pitch;
-      for (let j = 0; j < rows; j++) {
-        const on = j < lit;
-        const top = on && j === lit - 1 && i === signal;
-        ctx.globalAlpha = top ? 1 : on ? alpha : 0.06;
+      for (let j = 0; j < lit; j++) {
+        const top = j === lit - 1 && i === signal;
+        ctx.globalAlpha = top ? 1 : alpha;
         ctx.fillStyle = top ? accent : ink;
         ctx.beginPath();
-        ctx.arc(x, size.h - (j + 0.5) * pitch, top ? r * 1.5 : r, 0, Math.PI * 2);
+        ctx.arc(x, size.h - (j + 0.5) * pitch, top ? r * 1.25 : r, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -76,8 +78,13 @@ export function DotMatrix({ levels, active }: DotMatrixProps) {
   useEffect(() => {
     const now = performance.now();
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const from = reduced ? levels : levels.map((_, i) => (anim.current.to.length ? levelAt(i, now) : 0));
-    anim.current = { ...anim.current, from, to: levels, start: now };
+    // Each column shows the later point of its pair, so the last one is today.
+    const to = Array.from(
+      { length: Math.ceil(levels.length / GROUP) },
+      (_, c) => levels[Math.min(levels.length - 1, c * GROUP + GROUP - 1)],
+    );
+    const from = reduced ? to : to.map((_, i) => (anim.current.to.length ? levelAt(i, now) : 0));
+    anim.current = { ...anim.current, from, to, start: now };
     run.current();
   }, [levels]);
 

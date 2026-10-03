@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 /**
  * The moment of success: a lime disc that settles from 0.9 (never from 0)
  * on the spring curve, then a check that draws itself, as in the Copy Button.
- * Mono keeps red for signal dots, so its disc is ink.
+ * Mono keeps red for actions and live dots, so its disc is ink.
  */
 export function SuccessMark() {
   const [drawn, setDrawn] = useState(false);

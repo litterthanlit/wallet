@@ -65,7 +65,7 @@ export function CardsView() {
   return (
     <div className="flex flex-col">
       <header className="flex items-center justify-between">
-        <h1 className={`text-title font-medium text-ink mono:font-normal ${caps}`}>Cards</h1>
+        <h1 className="text-title font-medium text-ink">Cards</h1>
         <IconButton label="Create virtual card" onClick={createCard} className="-mr-2">
           <Plus />
         </IconButton>
@@ -180,11 +180,11 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
   return (
     <div className="flex flex-col">
       <div className="mt-5 grid grid-cols-2 gap-2">
-        <Button aria-expanded={revealed} aria-controls={detailsId} onClick={() => onReveal(!revealed)} className={caps}>
+        <Button aria-expanded={revealed} aria-controls={detailsId} onClick={() => onReveal(!revealed)}>
           {revealed ? <EyeOff /> : <Eye />}
           {revealed ? "Hide details" : "Show details"}
         </Button>
-        <Button aria-pressed={card.frozen} onClick={freeze} className={caps}>
+        <Button aria-pressed={card.frozen} onClick={freeze}>
           <Snowflake />
           {card.frozen ? "Unfreeze" : "Freeze"}
         </Button>
@@ -228,15 +228,12 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
           aria-valuemax={card.limit / 100}
           aria-valuenow={spent / 100}
           aria-valuetext={`${money(spent)} of ${money(card.limit)} monthly limit`}
-          className="mt-2.5"
+          className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)]"
         >
-          <div className="h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:hidden">
-            <div
-              className="h-full rounded-full bg-ink transition-[width] duration-(--duration-move) ease-out"
-              style={{ width: `${share}%` }}
-            />
-          </div>
-          <DotMeter share={share} />
+          <div
+            className="h-full rounded-full bg-ink transition-[width] duration-(--duration-move) ease-out"
+            style={{ width: `${share}%` }}
+          />
         </div>
       </section>
 
@@ -301,30 +298,6 @@ function DetailRow({
           </span>
         )}
       </dd>
-    </div>
-  );
-}
-
-const METER_DOTS = 28;
-
-/**
- * Mono's spend meter: a row of LEDs, lit up to the share spent, the leading
- * one red. Lights step on in turn, left to right. Decorative; the meter
- * around it carries the value.
- */
-function DotMeter({ share }: { share: number }) {
-  const lit = Math.round((share / 100) * METER_DOTS);
-  return (
-    <div aria-hidden className="hidden justify-between mono:flex">
-      {Array.from({ length: METER_DOTS }, (_, i) => (
-        <span
-          key={i}
-          className={`size-1.5 rounded-full transition-colors duration-(--duration-enter) ease-out ${
-            i === lit - 1 ? "bg-accent" : i < lit ? "bg-ink" : "bg-line-strong"
-          }`}
-          style={{ transitionDelay: `${i * 12}ms` }}
-        />
-      ))}
     </div>
   );
 }

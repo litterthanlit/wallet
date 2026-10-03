@@ -32,11 +32,11 @@ npm run build:artifact   # one self-contained HTML file → artifact/litt-wallet
   its details, with Send again for people.
 - **Feedback.** Every action lands in the Toast Stack. A few seconds after load, Ada pays you back, so you can watch
   the ticker and a toast arrive together.
-- **Mono theme.** A third, light theme after Nothing OS. Everything is set in Geist Mono on a grey ground with
-  pale, hairline widgets; labels go to spaced capitals. The balance becomes one widget: period as words in the
-  corner, the figure with its symbol and cents set small, and the chart redrawn as columns of LEDs that step into
-  place. Card art is seen through a dot grid, spend is a row of lights, and red is the one signal colour: live dots,
-  the active tab, pending.
+- **Mono theme.** A third, quieter light theme. A grey ground with pale, hairline widgets; Geist for reading and
+  Geist Mono for small caps labels. The balance becomes one widget: period as words in the corner, the figure with
+  its symbol and cents set small, and the chart redrawn as columns of dots, older days fading back. Red is the one
+  accent: the Send tile, hold to send, live dots and the active tab. Card art keeps its colour, the only vivid
+  thing on the screen.
 - **Keyboard.** `1` `2` `3` switch tabs, `S` send, `R` request, `T` top up, `H` hide the balance, `Esc` closes a sheet.
 
 ## Design system

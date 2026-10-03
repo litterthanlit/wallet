@@ -16,8 +16,9 @@ import { caps } from "../theme";
 
 const since: Record<Period, string> = { week: "past week", month: "past month", year: "past year" };
 
-// Mono squares the tiles off into widgets: taller, rounder, caps labels.
-const tile = `flex h-[72px] flex-col items-center justify-center gap-1.5 rounded-lg text-meta font-medium transition-[background-color,box-shadow,transform,opacity] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] mono:h-[88px] mono:gap-2.5 mono:rounded-[22px] mono:font-normal ${caps}`;
+// Mono rounds the tiles off into widgets.
+const tile =
+  "flex h-[72px] flex-col items-center justify-center gap-1.5 rounded-lg text-meta font-medium transition-[background-color,box-shadow,transform,opacity] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] mono:h-20 mono:gap-2 mono:rounded-[22px]";
 const tileSecondary = `${tile} bg-surface text-ink shadow-sm hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)]`;
 
 export function HomeView() {
@@ -122,7 +123,7 @@ export function HomeView() {
           type="button"
           aria-keyshortcuts="S"
           onClick={() => openSheet({ kind: "send" })}
-          className={`${tile} bg-ink text-canvas hover:opacity-85`}
+          className={`${tile} bg-ink text-canvas hover:opacity-85 mono:bg-accent mono:text-accent-ink`}
         >
           <ArrowUpRight />
           Send
