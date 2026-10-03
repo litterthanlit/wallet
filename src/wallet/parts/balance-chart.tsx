@@ -15,9 +15,10 @@ type BalanceChartProps = {
  * marked by the system's lime dot. Scrub with a pointer (touch drags
  * horizontally and still lets the page scroll vertically) or, once focused,
  * the arrow keys: it is a slider whose value text is the date and balance.
- * Paths share a point count, so switching period morphs the line. The wash
- * and the ground ringing the markers read `--chart-wash-*` and `--chart-ground`,
- * so a theme or a containing widget can tune them.
+ * Paths share a point count, so switching period morphs the line. The line,
+ * the wash and the ground ringing the markers read `--chart-line*`,
+ * `--chart-wash-*` and `--chart-ground`, so a theme or a widget can tune them.
+ * Mono drops the resting live dot: the line alone ends at today.
  */
 export function BalanceChart({ points, period, onScrub, summary }: BalanceChartProps) {
   const [index, setIndex] = useState<number | null>(null);
@@ -81,6 +82,7 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
   const point = points[active];
   const xActive = (active / (POINTS - 1)) * 100;
   const morph = "d var(--duration-move) var(--ease-out)";
+  const stroke = { stroke: "var(--chart-line, var(--ink))", strokeWidth: "var(--chart-line-width, 2px)" };
 
   return (
     <div
@@ -137,31 +139,28 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
           <path
             d={line}
             fill="none"
-            stroke="var(--ink)"
             strokeOpacity={index === null ? 0 : 0.2}
-            strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            style={{ d: `path("${line}")`, transition: morph } as React.CSSProperties}
+            style={{ d: `path("${line}")`, transition: morph, ...stroke } as React.CSSProperties}
           />
           <path
             d={line}
             clipPath={`url(#${uid}-past)`}
             fill="none"
-            stroke="var(--ink)"
-            strokeWidth={2}
+
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            style={{ d: `path("${line}")`, transition: morph } as React.CSSProperties}
+            style={{ d: `path("${line}")`, transition: morph, ...stroke } as React.CSSProperties}
           />
         </svg>
 
         {index === null ? (
           <span
             aria-hidden
-            className="absolute size-2.5 -translate-1/2 transition-[top] duration-(--duration-move) ease-out"
+            className="absolute size-2.5 -translate-1/2 transition-[top] duration-(--duration-move) ease-out mono:hidden"
             style={{ left: "100%", top: `${y(points[POINTS - 1].v)}%` }}
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60" />
@@ -172,7 +171,7 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
             <span aria-hidden className="absolute inset-y-0 w-px bg-line-strong" style={{ left: `${xActive}%` }} />
             <span
               aria-hidden
-              className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--chart-ground,var(--canvas))]"
+              className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--chart-ground,var(--canvas))] mono:size-2 mono:bg-(--chart-line)"
               style={{ left: `${xActive}%`, top: `${y(point.v)}%` }}
             />
           </>

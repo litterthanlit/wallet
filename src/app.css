@@ -64,6 +64,9 @@
   /* A soft grey under the line that still reaches the baseline. */
   --chart-wash-top: 0.07;
   --chart-wash-bottom: 0.015;
+  /* A fine, mid-grey line: the figure above carries the weight. */
+  --chart-line: #9a9a9a;
+  --chart-line-width: 1.25px;
   color-scheme: light;
 }
 

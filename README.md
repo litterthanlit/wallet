@@ -34,7 +34,7 @@ npm run build:artifact   # one self-contained HTML file → artifact/litt-wallet
   the ticker and a toast arrive together.
 - **Mono theme.** A third, quieter light theme. A grey ground with pale, hairline widgets; Geist for reading and
   Geist Mono for small caps labels. The balance becomes one widget: period as words in the corner, the figure with
-  its symbol and cents set small, and a plain line over a soft grey wash. Red is the one
+  its symbol and cents set small, and a fine grey line over a soft grey wash. Red is the one
   accent: the Send tile, hold to send, live dots and the active tab. Card art keeps its colour, the only vivid
   thing on the screen.
 - **Keyboard.** `1` `2` `3` switch tabs, `S` send, `R` request, `T` top up, `H` hide the balance, `Esc` closes a sheet.
