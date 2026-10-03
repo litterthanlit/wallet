@@ -6,6 +6,7 @@ import { categoryLabel, recent, type Txn } from "../data";
 import { dayKey, dayLabel, money, signedMoney } from "../format";
 import { TxnRow } from "../parts/txn-row";
 import { useWallet } from "../store";
+import { caps } from "../theme";
 
 type Filter = "all" | "in" | "out";
 
@@ -49,7 +50,7 @@ export function ActivityView() {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-title font-medium text-ink">Activity</h1>
+      <h1 className={`text-title font-medium text-ink mono:font-normal ${caps}`}>Activity</h1>
 
       <dl className="mt-5 grid grid-cols-2 gap-2">
         <Stat label="Money in" value={money(moneyIn)} />
@@ -67,7 +68,7 @@ export function ActivityView() {
             placeholder="Search activity"
             aria-label="Search activity"
             autoComplete="off"
-            className="h-10 w-full rounded-md bg-surface pl-9 pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter)"
+            className="h-10 w-full rounded-md bg-surface pl-9 mono:rounded-full pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter)"
           />
         </div>
         <div>
@@ -83,7 +84,9 @@ export function ActivityView() {
         <div className="mt-4 flex flex-col">
           {groups.map((group) => (
             <section key={group.key} aria-label={dayLabel(group.key)}>
-              <h2 className="sticky top-[env(safe-area-inset-top,0px)] z-10 -mx-5 flex items-baseline justify-between bg-canvas/60 px-5 pb-1 pt-3 text-meta text-muted backdrop-blur-xl">
+              <h2
+                className={`sticky top-[env(safe-area-inset-top,0px)] z-10 -mx-5 flex items-baseline justify-between bg-canvas/60 px-5 pb-1 pt-3 text-meta text-muted backdrop-blur-xl ${caps}`}
+              >
                 <span>{dayLabel(group.key)}</span>
                 <span className="tabular-nums">{signedMoney(group.net)}</span>
               </h2>
@@ -124,9 +127,11 @@ export function ActivityView() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)]">
-      <dt className="text-meta text-muted">{label}, 30 days</dt>
-      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink">{value}</dd>
+    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)] mono:rounded-[22px] mono:bg-surface mono:px-4 mono:py-4">
+      <dt className={`text-meta text-muted ${caps}`}>{label}, 30 days</dt>
+      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-3 mono:text-title mono:font-normal">
+        {value}
+      </dd>
     </div>
   );
 }

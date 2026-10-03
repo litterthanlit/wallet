@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { SegmentedControl } from "@/components/ui/segmented-control";
+import { setTheme, themes, useTheme, type Theme } from "@/components/ui/theme-toggle";
 import { ToastStack } from "@/components/ui/toast-stack";
 import { Button, Dot, Kbd } from "@/design-system";
 import { contactById } from "./data";
@@ -9,6 +10,7 @@ import { SendSheet } from "./sheets/send-sheet";
 import { TopUpSheet } from "./sheets/top-up-sheet";
 import { TxnSheet } from "./sheets/txn-sheet";
 import { UIContext, WalletProvider, useWallet, type SheetState, type Tab, type UI } from "./store";
+import { caps } from "./theme";
 import { ActivityView } from "./views/activity";
 import { CardsView } from "./views/cards";
 import { HomeView } from "./views/home";
@@ -195,6 +197,10 @@ const tries = [
   { title: "Hold to send", body: "Pick someone, type an amount, then hold. Letting go early rewinds the fill." },
   { title: "Freeze a card", body: "On Cards, the art drains to grey. Press a card to send a pulse through it." },
   { title: "Wait a moment", body: "Ada pays you back a few seconds in. The toast and the balance arrive together." },
+  {
+    title: "Switch to mono",
+    body: "A Nothing-style light theme: monospace caps, an LED chart, card art seen through dots, one red signal.",
+  },
 ];
 
 const shortcuts: [string[], string][] = [
@@ -208,6 +214,7 @@ const shortcuts: [string[], string][] = [
 
 /** The editorial column beside the device on wide screens. */
 function Intro({ onReset }: { onReset: () => void }) {
+  const theme = useTheme();
   return (
     <aside aria-label="About this prototype" className="hidden max-w-[420px] flex-col lg:flex">
       <p className="text-body">
@@ -219,7 +226,7 @@ function Intro({ onReset }: { onReset: () => void }) {
         components gallery.
       </p>
 
-      <h2 className="mt-12 text-body text-ink">Try this</h2>
+      <h2 className={`mt-12 text-body text-ink mono:text-meta ${caps}`}>Try this</h2>
       <ol className="mt-3 flex flex-col gap-4">
         {tries.map((t, i) => (
           <li key={t.title}>
@@ -232,7 +239,7 @@ function Intro({ onReset }: { onReset: () => void }) {
         ))}
       </ol>
 
-      <h2 className="mt-12 text-body text-ink">Keyboard</h2>
+      <h2 className={`mt-12 text-body text-ink mono:text-meta ${caps}`}>Keyboard</h2>
       <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2">
         {shortcuts.map(([keys, label]) => (
           <li key={label} className="flex items-center gap-2 text-body text-muted">
@@ -246,9 +253,9 @@ function Intro({ onReset }: { onReset: () => void }) {
         ))}
       </ul>
 
-      <div className="mt-12 flex items-center gap-2">
+      <div className="mt-12 flex flex-wrap items-center gap-3">
         <Button onClick={onReset}>Reset prototype</Button>
-        <ThemeToggle />
+        <SegmentedControl label="Theme" options={themes} value={theme} onChange={(v) => setTheme(v as Theme)} />
       </div>
       <p className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-meta text-muted">
         <span className="inline-flex items-center gap-1.5">

@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, type ComponentType, type SVGProps } from "reac
 import { CardIcon, Home, ListIcon } from "@/components/ui/icons";
 import { createSpring, springs, type Spring } from "@/design-system";
 import type { Tab } from "../store";
+import { caps } from "../theme";
 
 const tabs: { value: Tab; label: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
   { value: "home", label: "Home", Icon: Home },
@@ -12,7 +13,8 @@ const tabs: { value: Tab; label: string; Icon: ComponentType<SVGProps<SVGSVGElem
 /**
  * Primary navigation as a floating, frosted pill. One indicator springs
  * between items (position and width are separate springs, as in the
- * Segmented Control), so it stretches a little on the way.
+ * Segmented Control), so it stretches a little on the way. Mono drops the
+ * icons for caps words, and the current tab takes the red signal dot.
  */
 export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab) => void; inert?: boolean }) {
   const list = useRef<HTMLDivElement>(null);
@@ -67,11 +69,17 @@ export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab
                   type="button"
                   aria-current={current ? "page" : undefined}
                   onClick={() => onChange(value)}
-                  className={`relative z-10 flex h-11 items-center gap-2 rounded-full px-4 text-meta font-medium transition-[color,transform] duration-(--duration-enter) ease-out active:scale-[0.97] ${
+                  className={`relative z-10 flex h-11 items-center gap-2 rounded-full px-4 text-meta font-medium transition-[color,transform] duration-(--duration-enter) ease-out active:scale-[0.97] mono:font-normal ${caps} ${
                     current ? "text-ink" : "text-muted hover:text-ink"
                   }`}
                 >
-                  <Icon className="size-4" />
+                  <Icon className="size-4 mono:hidden" />
+                  <span
+                    aria-hidden
+                    className={`hidden size-1.5 rounded-full bg-accent transition-[opacity,scale] duration-(--duration-enter) ease-out mono:block ${
+                      current ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                    }`}
+                  />
                   {label}
                 </button>
               </li>

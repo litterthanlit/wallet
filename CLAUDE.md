@@ -16,6 +16,9 @@ A digital wallet prototype on the litt design system (source: github.com/littert
   reduced motion.
 - Writing: sentence case, labels say what happens ("Send $240.00", then "Sent"), status in parentheses with a lime
   dot: "Metro Transit (Pending)".
+- Mono theme (`data-theme="mono"`, Nothing OS-style): tokens in `src/app.css`, shape changes via the `mono:` variant,
+  caps labels via `caps` from `src/wallet/theme.ts`. In mono, `accent` is red and still a fill only; success and
+  "hold to send" use ink, not red. Check new UI in all three themes.
 - Don't override a component's own position or size utilities through `className`. Tailwind applies the
   conflicting class by stylesheet order, not by the order you wrote them. Wrap the component instead.
 - Vendored files (see README) stay as they are upstream: don't reformat them, and record any change in the file's

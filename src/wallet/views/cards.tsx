@@ -8,6 +8,7 @@ import { makeVirtualCard, spentRecently, user, type Card } from "../data";
 import { lastFour, money } from "../format";
 import { PaymentCard } from "../parts/payment-card";
 import { useWallet } from "../store";
+import { caps } from "../theme";
 
 const GAP = 12;
 
@@ -64,7 +65,7 @@ export function CardsView() {
   return (
     <div className="flex flex-col">
       <header className="flex items-center justify-between">
-        <h1 className="text-title font-medium text-ink">Cards</h1>
+        <h1 className={`text-title font-medium text-ink mono:font-normal ${caps}`}>Cards</h1>
         <IconButton label="Create virtual card" onClick={createCard} className="-mr-2">
           <Plus />
         </IconButton>
@@ -95,7 +96,7 @@ export function CardsView() {
               <p className="truncate text-body font-medium text-ink">
                 {card.name} {card.frozen && <span className="font-normal text-muted">(Frozen)</span>}
               </p>
-              <p className="text-meta text-muted">
+              <p className={`text-meta text-muted ${caps}`}>
                 {card.kind} · •••• {lastFour(card.number)}
               </p>
             </div>
@@ -179,11 +180,11 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
   return (
     <div className="flex flex-col">
       <div className="mt-5 grid grid-cols-2 gap-2">
-        <Button aria-expanded={revealed} aria-controls={detailsId} onClick={() => onReveal(!revealed)}>
+        <Button aria-expanded={revealed} aria-controls={detailsId} onClick={() => onReveal(!revealed)} className={caps}>
           {revealed ? <EyeOff /> : <Eye />}
           {revealed ? "Hide details" : "Show details"}
         </Button>
-        <Button aria-pressed={card.frozen} onClick={freeze}>
+        <Button aria-pressed={card.frozen} onClick={freeze} className={caps}>
           <Snowflake />
           {card.frozen ? "Unfreeze" : "Freeze"}
         </Button>
@@ -191,7 +192,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
 
       <div id={detailsId}>
         {revealed && (
-          <dl className="mt-3 grid animate-enter grid-cols-2 rounded-xl bg-surface shadow-sm">
+          <dl className="mt-3 grid animate-enter grid-cols-2 rounded-xl bg-surface shadow-sm mono:rounded-[24px]">
             <DetailRow
               label="Card number"
               value={card.number}
@@ -212,10 +213,10 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
 
       <section aria-labelledby="spend-heading" className="mt-7">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 id="spend-heading" className="text-body text-muted">
+          <h2 id="spend-heading" className={`text-body text-muted mono:text-meta ${caps}`}>
             Spent, last 30 days
           </h2>
-          <p className="text-meta tabular-nums text-muted">
+          <p className={`text-meta tabular-nums text-muted ${caps}`}>
             {share}% of {money(card.limit)}
           </p>
         </div>
@@ -227,20 +228,23 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
           aria-valuemax={card.limit / 100}
           aria-valuenow={spent / 100}
           aria-valuetext={`${money(spent)} of ${money(card.limit)} monthly limit`}
-          className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)]"
+          className="mt-2.5"
         >
-          <div
-            className="h-full rounded-full bg-ink transition-[width] duration-(--duration-move) ease-out"
-            style={{ width: `${share}%` }}
-          />
+          <div className="h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:hidden">
+            <div
+              className="h-full rounded-full bg-ink transition-[width] duration-(--duration-move) ease-out"
+              style={{ width: `${share}%` }}
+            />
+          </div>
+          <DotMeter share={share} />
         </div>
       </section>
 
       <section aria-labelledby="controls-heading" className="mt-8">
-        <h2 id="controls-heading" className="text-body text-muted">
+        <h2 id="controls-heading" className={`text-body text-muted mono:text-meta ${caps}`}>
           Controls
         </h2>
-        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)]">
+        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:rounded-[24px] mono:bg-surface">
           {controls.map(({ key, label, hint, Icon }) => (
             <li key={key} className="flex items-center gap-3 px-4 py-3">
               <Icon className="size-4 shrink-0 text-muted" />
@@ -288,7 +292,7 @@ function DetailRow({
 }) {
   return (
     <div className={`relative min-w-0 py-2.5 pl-4 ${copy ? "pr-12" : "pr-4"} ${className}`}>
-      <dt className="text-meta text-muted">{label}</dt>
+      <dt className={`text-meta text-muted ${caps}`}>{label}</dt>
       <dd className={`truncate text-body text-ink ${mono ? "font-mono tabular-nums tracking-wide" : ""}`}>
         {value}
         {copy && (
@@ -297,6 +301,30 @@ function DetailRow({
           </span>
         )}
       </dd>
+    </div>
+  );
+}
+
+const METER_DOTS = 28;
+
+/**
+ * Mono's spend meter: a row of LEDs, lit up to the share spent, the leading
+ * one red. Lights step on in turn, left to right. Decorative; the meter
+ * around it carries the value.
+ */
+function DotMeter({ share }: { share: number }) {
+  const lit = Math.round((share / 100) * METER_DOTS);
+  return (
+    <div aria-hidden className="hidden justify-between mono:flex">
+      {Array.from({ length: METER_DOTS }, (_, i) => (
+        <span
+          key={i}
+          className={`size-1.5 rounded-full transition-colors duration-(--duration-enter) ease-out ${
+            i === lit - 1 ? "bg-accent" : i < lit ? "bg-ink" : "bg-line-strong"
+          }`}
+          style={{ transitionDelay: `${i * 12}ms` }}
+        />
+      ))}
     </div>
   );
 }

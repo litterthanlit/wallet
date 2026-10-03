@@ -3,16 +3,17 @@ import { GradientField, palettes } from "@/components/ui/gradient-field";
 import { Contactless, Snowflake } from "@/components/ui/icons";
 import type { Card } from "../data";
 import { lastFour } from "../format";
+import { caps } from "../theme";
 
 /** The frosted chip from the Gradient Card: legible on any part of any palette. */
-const frost =
-  "inline-flex items-center justify-center gap-1.5 rounded-full bg-surface/70 text-meta font-medium text-ink shadow-sm backdrop-blur-md backdrop-saturate-150";
+const frost = `inline-flex items-center justify-center gap-1.5 rounded-full bg-surface/70 text-meta font-medium text-ink shadow-sm backdrop-blur-md backdrop-saturate-150 mono:bg-surface mono:font-normal mono:backdrop-filter-none ${caps}`;
 const chip = `${frost} h-6 px-2.5`;
 
 /**
  * A payment card whose face is a live mesh gradient. Hover swirls it, a press
  * sends a pulse from the finger (from the centre for keyboard activation).
- * Frozen cards drain to greyscale under a frost layer.
+ * Frozen cards drain to greyscale under a frost layer. In mono the art is
+ * grey and seen only through an LED grid on a pale face; frozen dims it.
  */
 export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
   const [focused, setFocused] = useState(false);
@@ -26,17 +27,20 @@ export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
       onFocus={(e) => setFocused(e.currentTarget.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
       aria-label={`${card.name} ${card.kind.toLowerCase()} card ending ${lastFour(card.number)}${card.frozen ? ", frozen" : ""}`}
-      className="relative block aspect-[1.586] w-full max-w-full overflow-hidden rounded-xl text-left outline-offset-4 transition-[scale] duration-(--duration-exit) ease-out active:scale-[0.98]"
+      className="relative block aspect-[1.586] w-full max-w-full overflow-hidden rounded-xl text-left outline-offset-4 transition-[scale] duration-(--duration-exit) ease-out active:scale-[0.98] mono:rounded-[24px] mono:bg-surface"
     >
       <span
-        className="absolute inset-0 transition-[filter] duration-(--duration-move) ease-out"
+        className={`dot-screen absolute inset-0 transition-[filter,opacity] duration-(--duration-move) ease-out ${card.frozen ? "mono:opacity-30" : ""}`}
         style={{ filter: card.frozen ? "grayscale(1) contrast(0.85) brightness(1.08)" : "none" }}
       >
-        <GradientField colors={palette.colors} seed={seed} active={focused} pulse={pulse} />
+        {/* Darkened before the grid, so even a pale palette prints as a legible halftone. */}
+        <span className="absolute inset-0 mono:brightness-75 mono:contrast-125 mono:grayscale">
+          <GradientField colors={palette.colors} seed={seed} active={focused} pulse={pulse} />
+        </span>
       </span>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)]"
+        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)] mono:rounded-[24px]"
       />
 
       <span aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3.5">

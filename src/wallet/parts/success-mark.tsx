@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 /**
  * The moment of success: a lime disc that settles from 0.9 (never from 0)
  * on the spring curve, then a check that draws itself, as in the Copy Button.
+ * Mono keeps red for signal dots, so its disc is ink.
  */
 export function SuccessMark() {
   const [drawn, setDrawn] = useState(false);
@@ -15,7 +16,7 @@ export function SuccessMark() {
   return (
     <span
       aria-hidden
-      className="grid size-16 place-items-center rounded-full bg-accent text-accent-ink shadow-[0_0_0_8px_color-mix(in_oklab,var(--accent)_22%,transparent)] transition-[transform,opacity] duration-(--duration-move) ease-spring"
+      className="grid size-16 place-items-center rounded-full bg-accent text-accent-ink shadow-[0_0_0_8px_color-mix(in_oklab,var(--accent)_22%,transparent)] mono:bg-ink mono:text-canvas mono:shadow-[0_0_0_8px_color-mix(in_oklab,var(--ink)_8%,transparent)] transition-[transform,opacity] duration-(--duration-move) ease-spring"
       style={{ transform: drawn ? "none" : "scale(0.9)", opacity: drawn ? 1 : 0 }}
     >
       <svg viewBox="0 0 16 16" fill="none" className="size-7">

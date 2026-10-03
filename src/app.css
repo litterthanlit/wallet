@@ -28,6 +28,48 @@
   --scrim: rgb(0 0 0 / 0.6);
 }
 
+/*
+ * Mono: a third theme after Nothing OS. A grey ground with pale widgets, every
+ * word in Geist Mono, labels in spaced capitals, and red as the one signal
+ * colour (live dots, the active tab). Opt-in only; it never follows the OS.
+ * `:root[...]` outranks the OS-dark block in tokens.css, so the choice holds
+ * on a dark system too.
+ */
+@custom-variant mono (&:where([data-theme="mono"], [data-theme="mono"] *));
+
+:root[data-theme="mono"] {
+  --canvas: #ececec;
+  --panel: #f4f4f4;
+  --surface: #f9f9f9;
+  --ink: #1a1a1a;
+  --muted: #686868; /* 4.7:1 on canvas */
+  --subtle: #a6a6a6;
+  --line: rgb(0 0 0 / 0.07);
+  --line-strong: rgb(0 0 0 / 0.13);
+  /* Red is a fill for signal dots, like the lime it replaces. */
+  --accent: #d71921;
+  --accent-ink: #ffffff;
+  --accent-strong: #1a1a1a;
+  --danger: #d71921;
+  --focus: #d71921;
+  --pattern: rgb(0 0 0 / 0.08);
+  /* Flatter than light: widgets are hairlines on grey, barely lifted. */
+  --elevation-sm: 0 0 0 1px var(--line), 0 1px 1px rgb(0 0 0 / 0.02);
+  --elevation-md: 0 0 0 1px var(--line), 0 1px 2px rgb(0 0 0 / 0.03), 0 6px 12px -6px rgb(0 0 0 / 0.05);
+  --elevation-lg: 0 0 0 1px var(--line), 0 2px 4px rgb(0 0 0 / 0.03), 0 20px 40px -16px rgb(0 0 0 / 0.1);
+  --font-geist-sans: "Geist Mono Variable";
+  --wash-1: transparent;
+  --wash-2: transparent;
+  --wash-3: transparent;
+  --scrim: rgb(0 0 0 / 0.22);
+  color-scheme: light;
+}
+
+/* Mono screens card art through an LED grid: the mesh shows only in the dots. */
+:root[data-theme="mono"] .dot-screen {
+  mask: radial-gradient(circle, #000 1.6px, transparent 2px) 0 0 / 6px 6px;
+}
+
 html,
 body {
   height: 100%;
