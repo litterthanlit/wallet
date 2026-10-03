@@ -1,0 +1,11 @@
+dist
+artifact
+package-lock.json
+# Vendored from litterthanlit/components: keep byte-for-byte diffable with upstream.
+src/design-system
+src/components/ui/copy-button.tsx
+src/components/ui/gradient-field.tsx
+src/components/ui/hold-to-confirm.tsx
+src/components/ui/number-ticker.tsx
+src/components/ui/segmented-control.tsx
+src/components/ui/toast-stack.tsx

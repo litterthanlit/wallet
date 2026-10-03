@@ -1,0 +1,12 @@
+# dependencies
+/node_modules
+
+# builds
+/dist
+/artifact
+
+# misc
+.DS_Store
+*.tsbuildinfo
+.env*
+npm-debug.log*
