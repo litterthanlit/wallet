@@ -68,7 +68,7 @@ export function ActivityView() {
             placeholder="Search activity"
             aria-label="Search activity"
             autoComplete="off"
-            className="h-10 w-full rounded-md bg-surface pl-9 mono:rounded-full pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter)"
+            className="h-10 w-full rounded-md bg-surface pl-9 pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter)"
           />
         </div>
         <div>
@@ -127,9 +127,9 @@ export function ActivityView() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)] mono:rounded-[22px] mono:bg-surface mono:px-4 mono:py-4">
+    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)] mono:flex mono:flex-col mono:justify-between mono:bg-surface mono:py-5">
       <dt className={`text-meta text-muted ${caps}`}>{label}, 30 days</dt>
-      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-2 mono:text-title">{value}</dd>
+      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-3 mono:text-title">{value}</dd>
     </div>
   );
 }

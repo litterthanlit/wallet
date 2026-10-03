@@ -192,7 +192,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
 
       <div id={detailsId}>
         {revealed && (
-          <dl className="mt-3 grid animate-enter grid-cols-2 rounded-xl bg-surface shadow-sm mono:rounded-[24px]">
+          <dl className="mt-3 grid animate-enter grid-cols-2 rounded-xl bg-surface shadow-sm">
             <DetailRow
               label="Card number"
               value={card.number}
@@ -241,7 +241,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
         <h2 id="controls-heading" className={`text-body text-muted mono:text-meta ${caps}`}>
           Controls
         </h2>
-        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:rounded-[24px] mono:bg-surface">
+        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:bg-surface">
           {controls.map(({ key, label, hint, Icon }) => (
             <li key={key} className="flex items-center gap-3 px-4 py-3">
               <Icon className="size-4 shrink-0 text-muted" />

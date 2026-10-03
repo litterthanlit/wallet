@@ -37,8 +37,8 @@ export function BalanceWidget(props: BalanceWidgetProps) {
   const mask = "••••";
 
   return (
-    <section aria-labelledby="balance-label" className="mt-7 rounded-[28px] bg-surface shadow-sm">
-      <div className="px-5 pb-5 pt-4">
+    <section aria-labelledby="balance-label" className="mt-8 rounded-xl bg-surface shadow-sm">
+      <div className="px-6 pb-7 pt-5">
         <div className="flex h-8 items-center justify-between gap-3">
           <h1 id="balance-label" className={`text-meta text-ink ${caps}`}>
             {scrub ? pointLabel(period, scrub.t) : "Balance"}
@@ -46,7 +46,7 @@ export function BalanceWidget(props: BalanceWidgetProps) {
           <PeriodTabs value={period} onChange={onPeriod} />
         </div>
 
-        <p className="mt-6 flex items-start leading-none text-ink">
+        <p className="mt-10 flex items-start leading-none text-ink">
           {hidden ? (
             <>
               <span aria-hidden className="text-[3.25rem] tracking-[-0.04em]">
@@ -68,7 +68,7 @@ export function BalanceWidget(props: BalanceWidgetProps) {
           )}
         </p>
 
-        <p className={`mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-meta tabular-nums ${caps}`}>
+        <p className={`mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-meta tabular-nums ${caps}`}>
           <span className={`transition-colors duration-(--duration-enter) ${up ? "text-ink" : "text-danger"}`}>
             <span aria-hidden>{up ? "▲" : "▼"} </span>
             <span className="sr-only">{up ? "Up" : "Down"} </span>
@@ -78,12 +78,12 @@ export function BalanceWidget(props: BalanceWidgetProps) {
         </p>
       </div>
 
-      <div className="border-t border-line px-5 pb-4 pt-5">
+      <div className="border-t border-line px-6 pb-6 pt-8">
         {/* Markers ring in the widget's own ground, not the page's. */}
         <div className="[--chart-ground:var(--surface)]">
           <BalanceChart points={points} period={period} onScrub={onScrub} summary={summary} />
         </div>
-        <div aria-hidden className={`mt-3 flex justify-between gap-3 text-meta tabular-nums ${caps}`}>
+        <div aria-hidden className={`mt-4 flex justify-between gap-3 text-meta tabular-nums ${caps}`}>
           <span className="text-muted">
             {rangeStartLabel(period, now)} {hidden ? mask : money(start)}
           </span>

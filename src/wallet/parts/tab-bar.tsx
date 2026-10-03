@@ -53,12 +53,12 @@ export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab
     >
       <div
         ref={list}
-        className="pointer-events-auto relative rounded-full bg-surface/75 p-1 shadow-lg backdrop-blur-xl backdrop-saturate-150"
+        className="pointer-events-auto relative rounded-full bg-surface/75 mono:rounded-xl p-1 shadow-lg backdrop-blur-xl backdrop-saturate-150"
       >
         <span
           ref={indicator}
           aria-hidden
-          className="absolute inset-y-1 left-0 rounded-full bg-ink/[0.07] opacity-0 will-change-transform"
+          className="absolute inset-y-1 left-0 rounded-full bg-ink/[0.07] mono:rounded-lg opacity-0 will-change-transform"
         />
         <ul className="flex items-center">
           {tabs.map(({ value, label, Icon }) => {
@@ -69,7 +69,7 @@ export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab
                   type="button"
                   aria-current={current ? "page" : undefined}
                   onClick={() => onChange(value)}
-                  className={`relative z-10 flex h-11 items-center gap-2 rounded-full px-4 text-meta font-medium transition-[color,transform] duration-(--duration-enter) ease-out active:scale-[0.97] mono:font-normal ${caps} ${
+                  className={`relative z-10 flex h-11 items-center gap-2 rounded-full px-4 mono:rounded-lg text-meta font-medium transition-[color,transform] duration-(--duration-enter) ease-out active:scale-[0.97] mono:font-normal ${caps} ${
                     current ? "text-ink" : "text-muted hover:text-ink"
                   }`}
                 >

@@ -16,9 +16,9 @@ import { caps } from "../theme";
 
 const since: Record<Period, string> = { week: "past week", month: "past month", year: "past year" };
 
-// Mono rounds the tiles off into widgets.
+// Mono makes the tiles a little taller, to match the widgets around them.
 const tile =
-  "flex h-[72px] flex-col items-center justify-center gap-1.5 rounded-lg text-meta font-medium transition-[background-color,box-shadow,transform,opacity] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] mono:h-20 mono:gap-2 mono:rounded-[22px]";
+  "flex h-[72px] flex-col items-center justify-center gap-1.5 rounded-lg text-meta font-medium transition-[background-color,box-shadow,transform,opacity] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] mono:h-20 mono:gap-2";
 const tileSecondary = `${tile} bg-surface text-ink shadow-sm hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)]`;
 
 export function HomeView() {
@@ -118,7 +118,7 @@ export function HomeView() {
         </>
       )}
 
-      <section aria-label="Move money" className="mt-8 grid grid-cols-3 gap-2 mono:mt-2">
+      <section aria-label="Move money" className="mt-8 grid grid-cols-3 gap-2 mono:mt-3 mono:gap-3">
         <button
           type="button"
           aria-keyshortcuts="S"
@@ -150,7 +150,7 @@ export function HomeView() {
 
       <section
         aria-labelledby="recent-heading"
-        className="mt-10 mono:mt-2 mono:rounded-[28px] mono:bg-surface mono:px-5 mono:pb-3 mono:pt-3 mono:shadow-sm"
+        className="mt-10 mono:mt-3 mono:rounded-xl mono:bg-surface mono:px-6 mono:pb-4 mono:pt-5 mono:shadow-sm"
       >
         <div className="flex items-center justify-between">
           <SectionLabel id="recent-heading" className={`mono:text-meta mono:text-ink ${caps}`}>

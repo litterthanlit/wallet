@@ -27,7 +27,7 @@ export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
       onFocus={(e) => setFocused(e.currentTarget.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
       aria-label={`${card.name} ${card.kind.toLowerCase()} card ending ${lastFour(card.number)}${card.frozen ? ", frozen" : ""}`}
-      className="relative block aspect-[1.586] w-full max-w-full overflow-hidden rounded-xl text-left outline-offset-4 transition-[scale] duration-(--duration-exit) ease-out active:scale-[0.98] mono:rounded-[24px]"
+      className="relative block aspect-[1.586] w-full max-w-full overflow-hidden rounded-xl text-left outline-offset-4 transition-[scale] duration-(--duration-exit) ease-out active:scale-[0.98]"
     >
       <span
         className="absolute inset-0 transition-[filter] duration-(--duration-move) ease-out"
@@ -37,7 +37,7 @@ export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
       </span>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)] mono:rounded-[24px]"
+        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)]"
       />
 
       <span aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3.5">

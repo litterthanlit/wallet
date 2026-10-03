@@ -18,7 +18,7 @@ type BalanceChartProps = {
  * Paths share a point count, so switching period morphs the line. The line,
  * the wash and the ground ringing the markers read `--chart-line*`,
  * `--chart-wash-*` and `--chart-ground`, so a theme or a widget can tune them.
- * Mono drops the resting live dot: the line alone ends at today.
+ * Mono drops both dots: the line ends at today, and a scrub shows only the guide.
  */
 export function BalanceChart({ points, period, onScrub, summary }: BalanceChartProps) {
   const [index, setIndex] = useState<number | null>(null);
@@ -171,7 +171,7 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
             <span aria-hidden className="absolute inset-y-0 w-px bg-line-strong" style={{ left: `${xActive}%` }} />
             <span
               aria-hidden
-              className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--chart-ground,var(--canvas))] mono:size-2 mono:bg-(--chart-line)"
+              className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--chart-ground,var(--canvas))] mono:hidden"
               style={{ left: `${xActive}%`, top: `${y(point.v)}%` }}
             />
           </>
