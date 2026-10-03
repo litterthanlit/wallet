@@ -199,7 +199,7 @@ const tries = [
   { title: "Wait a moment", body: "Ada pays you back a few seconds in. The toast and the balance arrive together." },
   {
     title: "Switch to mono",
-    body: "A quieter light theme: grey ground, pale widgets, mono caps labels, a dot chart and one red accent.",
+    body: "A quieter light theme: grey ground, pale widgets, mono caps labels, a plain line chart and one red accent.",
   },
 ];
 

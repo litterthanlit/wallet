@@ -25,7 +25,7 @@ type BalanceWidgetProps = {
  * The mono theme's balance: one widget, after the Nothing OS sleep and
  * revenue cards. A caps header with the period as plain words, the figure
  * with its symbol and cents set small against the top of the digits, a
- * hairline, then the LED chart with both ends labelled underneath.
+ * hairline, then the balance line over a soft grey, both ends labelled underneath.
  */
 export function BalanceWidget(props: BalanceWidgetProps) {
   const { period, onPeriod, points, scrub, onScrub, shown, balance, start, hidden, summary, since, now } = props;
@@ -79,7 +79,10 @@ export function BalanceWidget(props: BalanceWidgetProps) {
       </div>
 
       <div className="border-t border-line px-5 pb-4 pt-5">
-        <BalanceChart points={points} period={period} onScrub={onScrub} summary={summary} variant="dots" />
+        {/* Markers ring in the widget's own ground, not the page's. */}
+        <div className="[--chart-ground:var(--surface)]">
+          <BalanceChart points={points} period={period} onScrub={onScrub} summary={summary} />
+        </div>
         <div aria-hidden className={`mt-3 flex justify-between gap-3 text-meta tabular-nums ${caps}`}>
           <span className="text-muted">
             {rangeStartLabel(period, now)} {hidden ? mask : money(start)}

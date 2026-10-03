@@ -61,6 +61,9 @@
   --wash-2: transparent;
   --wash-3: transparent;
   --scrim: rgb(0 0 0 / 0.22);
+  /* A soft grey under the line that still reaches the baseline. */
+  --chart-wash-top: 0.07;
+  --chart-wash-bottom: 0.015;
   color-scheme: light;
 }
 
