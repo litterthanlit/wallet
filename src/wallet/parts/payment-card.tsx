@@ -3,16 +3,17 @@ import { GradientField, palettes } from "@/components/ui/gradient-field";
 import { Contactless, Snowflake } from "@/components/ui/icons";
 import type { Card } from "../data";
 import { lastFour } from "../format";
+import { caps } from "../theme";
 
 /** The frosted chip from the Gradient Card: legible on any part of any palette. */
-const frost =
-  "inline-flex items-center justify-center gap-1.5 rounded-full bg-surface/70 text-meta font-medium text-ink shadow-sm backdrop-blur-md backdrop-saturate-150";
+const frost = `inline-flex items-center justify-center gap-1.5 rounded-full bg-surface/70 text-meta font-medium text-ink shadow-sm backdrop-blur-md backdrop-saturate-150 ${caps}`;
 const chip = `${frost} h-6 px-2.5`;
 
 /**
  * A payment card whose face is a live mesh gradient. Hover swirls it, a press
  * sends a pulse from the finger (from the centre for keyboard activation).
- * Frozen cards drain to greyscale under a frost layer.
+ * Frozen cards drain to greyscale under a frost layer. In mono the art keeps
+ * its colour: the one vivid thing on a quiet screen.
  */
 export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
   const [focused, setFocused] = useState(false);
@@ -36,7 +37,7 @@ export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
       </span>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)]"
+        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)] mono:hidden"
       />
 
       <span aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3.5">

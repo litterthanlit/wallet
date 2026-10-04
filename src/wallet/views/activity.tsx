@@ -1,15 +1,19 @@
 import { useMemo, useState } from "react";
 import { Search } from "@/components/ui/icons";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { useTheme } from "@/components/ui/theme-toggle";
 import { Button } from "@/design-system";
 import { categoryLabel, recent, type Txn } from "../data";
 import { dayKey, dayLabel, money, signedMoney } from "../format";
+import { BalanceTrend } from "../parts/balance-trend";
+import { TextTabs } from "../parts/text-tabs";
 import { TxnRow } from "../parts/txn-row";
 import { useWallet } from "../store";
+import { caps } from "../theme";
 
 type Filter = "all" | "in" | "out";
 
-const filters = [
+const filters: { value: Filter; label: string }[] = [
   { value: "all", label: "All" },
   { value: "in", label: "Money in" },
   { value: "out", label: "Money out" },
@@ -20,6 +24,7 @@ export function ActivityView() {
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
+  const mono = useTheme() === "mono";
 
   const { moneyIn, moneyOut } = useMemo(() => {
     const last30 = state.txns.filter((t) => recent(t));
@@ -51,12 +56,21 @@ export function ActivityView() {
     <div className="flex flex-col">
       <h1 className="text-title font-medium text-ink">Activity</h1>
 
-      <dl className="mt-5 grid grid-cols-2 gap-2">
+      {/* Mono moves the balance chart here from Home. */}
+      {mono && (
+        <div className="mt-8">
+          <BalanceTrend />
+        </div>
+      )}
+
+      {/* Mono: one label for the window, and both figures on one card. */}
+      <h2 className={`mt-12 hidden text-meta text-muted mono:block ${caps}`}>Last 30 days</h2>
+      <dl className="mt-5 grid grid-cols-2 gap-2 mono:mt-3 mono:gap-0 mono:rounded-xl mono:bg-surface mono:shadow-sm">
         <Stat label="Money in" value={money(moneyIn)} />
         <Stat label="Money out" value={money(moneyOut)} />
       </dl>
 
-      <div className="mt-5 flex flex-col gap-3">
+      <div className="mt-5 flex flex-col gap-3 mono:mt-12 mono:gap-4">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
           <input
@@ -67,12 +81,16 @@ export function ActivityView() {
             placeholder="Search activity"
             aria-label="Search activity"
             autoComplete="off"
-            className="h-10 w-full rounded-md bg-surface pl-9 pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter)"
+            className="h-10 w-full rounded-md bg-surface pl-9 pr-3 text-body text-ink shadow-sm transition-shadow duration-(--duration-exit) placeholder:text-muted hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] hover:duration-(--duration-enter) mono:hover:shadow-sm"
           />
         </div>
-        <div>
-          <SegmentedControl label="Show" options={filters} value={filter} onChange={(v) => setFilter(v as Filter)} />
-        </div>
+        {mono ? (
+          <TextTabs label="Show" options={filters} value={filter} onChange={setFilter} />
+        ) : (
+          <div>
+            <SegmentedControl label="Show" options={filters} value={filter} onChange={(v) => setFilter(v as Filter)} />
+          </div>
+        )}
       </div>
 
       <p className="sr-only" aria-live="polite">
@@ -83,11 +101,13 @@ export function ActivityView() {
         <div className="mt-4 flex flex-col">
           {groups.map((group) => (
             <section key={group.key} aria-label={dayLabel(group.key)}>
-              <h2 className="sticky top-[env(safe-area-inset-top,0px)] z-10 -mx-5 flex items-baseline justify-between bg-canvas/60 px-5 pb-1 pt-3 text-meta text-muted backdrop-blur-xl">
+              <h2
+                className={`sticky top-[env(safe-area-inset-top,0px)] z-10 -mx-5 flex items-baseline justify-between bg-canvas/60 px-5 pb-1 pt-3 mono:-mx-6 mono:px-6 mono:pb-2 mono:pt-6 text-meta text-muted backdrop-blur-xl ${caps}`}
+              >
                 <span>{dayLabel(group.key)}</span>
                 <span className="tabular-nums">{signedMoney(group.net)}</span>
               </h2>
-              <ul>
+              <ul className="mono:rounded-xl mono:bg-surface mono:px-4 mono:py-2 mono:shadow-sm">
                 {group.txns.map((txn) => (
                   <TxnRow
                     key={txn.id}
@@ -124,9 +144,12 @@ export function ActivityView() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)]">
-      <dt className="text-meta text-muted">{label}, 30 days</dt>
-      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink">{value}</dd>
+    <div className="rounded-lg bg-panel px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)] mono:bg-transparent mono:px-5 mono:py-5 mono:shadow-none">
+      <dt className={`text-meta text-muted ${caps}`}>
+        {label}
+        <span className="mono:hidden">, 30 days</span>
+      </dt>
+      <dd className="mt-0.5 text-lead font-medium tabular-nums text-ink mono:mt-3 mono:text-title">{value}</dd>
     </div>
   );
 }

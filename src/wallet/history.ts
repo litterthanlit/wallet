@@ -4,6 +4,8 @@
  * pinned to a fixed start and the live balance at the end, so sending or
  * receiving money moves the right edge of the line.
  */
+import { money } from "./format";
+
 export type Period = "week" | "month" | "year";
 export type Point = { t: number; v: number };
 
@@ -69,3 +71,10 @@ export function pointLabel(period: Period, t: number) {
 }
 
 export const rangeStartLabel = (period: Period, now: number) => daily.format(now - periodConfig(period).days * DAY);
+
+/** "past month": how far back the delta reaches. */
+export const pastLabel: Record<Period, string> = { week: "past week", month: "past month", year: "past year" };
+
+/** One sentence for screen readers describing the chart. */
+export const balanceSummary = (period: Period, start: number, end: number) =>
+  `Your balance went ${end >= start ? "up" : "down"} from ${money(start)} to ${money(end)} over the ${pastLabel[period]}.`;

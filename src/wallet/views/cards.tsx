@@ -8,6 +8,7 @@ import { makeVirtualCard, spentRecently, user, type Card } from "../data";
 import { lastFour, money } from "../format";
 import { PaymentCard } from "../parts/payment-card";
 import { useWallet } from "../store";
+import { caps } from "../theme";
 
 const GAP = 12;
 
@@ -77,7 +78,7 @@ export function CardsView() {
             onScroll={onScroll}
             aria-label="Your cards"
             role="group"
-            className="no-scrollbar relative -mx-5 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 pb-2"
+            className="no-scrollbar relative -mx-5 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 pb-2 mono:-mx-6 mono:mt-8 mono:scroll-px-6 mono:px-6"
           >
             {state.cards.map((c, i) => (
               <div
@@ -90,12 +91,12 @@ export function CardsView() {
             ))}
           </div>
 
-          <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="mt-3 flex items-center justify-between gap-3 mono:mt-5">
             <div className="min-w-0">
               <p className="truncate text-body font-medium text-ink">
                 {card.name} {card.frozen && <span className="font-normal text-muted">(Frozen)</span>}
               </p>
-              <p className="text-meta text-muted">
+              <p className={`text-meta text-muted ${caps}`}>
                 {card.kind} · •••• {lastFour(card.number)}
               </p>
             </div>
@@ -124,7 +125,7 @@ export function CardsView() {
           <CardPanel key={card.id} card={card} revealed={revealed} onReveal={setRevealed} />
         </>
       ) : (
-        <div className="mt-6 flex animate-enter flex-col items-center gap-3 rounded-xl bg-panel px-6 py-12 text-center shadow-[inset_0_0_0_1px_var(--line)]">
+        <div className="mt-6 flex animate-enter flex-col items-center gap-3 rounded-xl bg-panel px-6 py-12 text-center mono:bg-surface mono:shadow-none shadow-[inset_0_0_0_1px_var(--line)]">
           <p className="text-body font-medium text-ink">No cards yet</p>
           <p className="max-w-[240px] text-body text-muted">A virtual card works straight away for online payments.</p>
           <Button variant="primary" onClick={createCard} className="mt-2">
@@ -178,7 +179,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
 
   return (
     <div className="flex flex-col">
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="mt-5 grid grid-cols-2 gap-2 mono:mt-6 mono:gap-3">
         <Button aria-expanded={revealed} aria-controls={detailsId} onClick={() => onReveal(!revealed)}>
           {revealed ? <EyeOff /> : <Eye />}
           {revealed ? "Hide details" : "Show details"}
@@ -196,26 +197,30 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
               label="Card number"
               value={card.number}
               copy="Copy card number"
-              className="col-span-2 border-b border-line"
+              className="col-span-2 border-b border-line mono:border-transparent"
             />
-            <DetailRow label="Expires" value={card.expiry} className="border-b border-r border-line" />
+            <DetailRow
+              label="Expires"
+              value={card.expiry}
+              className="border-b border-r border-line mono:border-transparent"
+            />
             <DetailRow
               label="Security code"
               value={card.cvv}
               copy="Copy security code"
-              className="border-b border-line"
+              className="border-b border-line mono:border-transparent"
             />
             <DetailRow label="Name on card" value={user.name} mono={false} className="col-span-2" />
           </dl>
         )}
       </div>
 
-      <section aria-labelledby="spend-heading" className="mt-7">
+      <section aria-labelledby="spend-heading" className="mt-7 mono:mt-12">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 id="spend-heading" className="text-body text-muted">
+          <h2 id="spend-heading" className={`text-body text-muted mono:text-meta ${caps}`}>
             Spent, last 30 days
           </h2>
-          <p className="text-meta tabular-nums text-muted">
+          <p className={`text-meta tabular-nums text-muted ${caps}`}>
             {share}% of {money(card.limit)}
           </p>
         </div>
@@ -227,7 +232,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
           aria-valuemax={card.limit / 100}
           aria-valuenow={spent / 100}
           aria-valuetext={`${money(spent)} of ${money(card.limit)} monthly limit`}
-          className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)]"
+          className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:mt-4 mono:h-1 mono:bg-line-strong mono:shadow-none"
         >
           <div
             className="h-full rounded-full bg-ink transition-[width] duration-(--duration-move) ease-out"
@@ -236,13 +241,13 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
         </div>
       </section>
 
-      <section aria-labelledby="controls-heading" className="mt-8">
-        <h2 id="controls-heading" className="text-body text-muted">
+      <section aria-labelledby="controls-heading" className="mt-8 mono:mt-12">
+        <h2 id="controls-heading" className={`text-body text-muted mono:text-meta ${caps}`}>
           Controls
         </h2>
-        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)]">
+        <ul className="mt-2 divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:mt-3 mono:divide-transparent mono:bg-surface mono:py-1 mono:shadow-sm">
           {controls.map(({ key, label, hint, Icon }) => (
-            <li key={key} className="flex items-center gap-3 px-4 py-3">
+            <li key={key} className="flex items-center gap-3 px-4 py-3 mono:py-3.5">
               <Icon className="size-4 shrink-0 text-muted" />
               <div className="min-w-0 flex-1">
                 <p id={`${card.id}-${key}`} className="text-body text-ink">
@@ -263,7 +268,7 @@ function CardPanel({ card, revealed, onReveal }: { card: Card; revealed: boolean
         </ul>
       </section>
 
-      <section aria-label="Cancel card" className="mt-8 flex flex-col items-start gap-2">
+      <section aria-label="Cancel card" className="mt-8 flex flex-col items-start gap-2 mono:mt-12">
         <HoldToConfirm onConfirm={cancel} hint="Press and hold to cancel this card">
           Hold to cancel card
         </HoldToConfirm>
@@ -288,7 +293,7 @@ function DetailRow({
 }) {
   return (
     <div className={`relative min-w-0 py-2.5 pl-4 ${copy ? "pr-12" : "pr-4"} ${className}`}>
-      <dt className="text-meta text-muted">{label}</dt>
+      <dt className={`text-meta text-muted ${caps}`}>{label}</dt>
       <dd className={`truncate text-body text-ink ${mono ? "font-mono tabular-nums tracking-wide" : ""}`}>
         {value}
         {copy && (

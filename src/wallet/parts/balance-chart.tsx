@@ -15,7 +15,10 @@ type BalanceChartProps = {
  * marked by the system's lime dot. Scrub with a pointer (touch drags
  * horizontally and still lets the page scroll vertically) or, once focused,
  * the arrow keys: it is a slider whose value text is the date and balance.
- * Paths share a point count, so switching period morphs the line.
+ * Paths share a point count, so switching period morphs the line. The line,
+ * the wash and the ground ringing the markers read `--chart-line*`,
+ * `--chart-wash-*` and `--chart-ground`, so a theme or a widget can tune them.
+ * Mono drops both dots: the line ends at today, and a scrub shows only the guide.
  */
 export function BalanceChart({ points, period, onScrub, summary }: BalanceChartProps) {
   const [index, setIndex] = useState<number | null>(null);
@@ -79,6 +82,7 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
   const point = points[active];
   const xActive = (active / (POINTS - 1)) * 100;
   const morph = "d var(--duration-move) var(--ease-out)";
+  const stroke = { stroke: "var(--chart-line, var(--ink))", strokeWidth: "var(--chart-line-width, 2px)" };
 
   return (
     <div
@@ -103,70 +107,76 @@ export function BalanceChart({ points, period, onScrub, summary }: BalanceChartP
       <p id={summaryId} className="sr-only">
         {summary} Use the arrow keys to read the balance at a point in time.
       </p>
-      <svg
-        aria-hidden
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 size-full overflow-visible"
-      >
-        <defs>
-          <linearGradient id={`${uid}-wash`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" style={{ stopColor: "var(--ink)", stopOpacity: 0.1 }} />
-            <stop offset="1" style={{ stopColor: "var(--ink)", stopOpacity: 0 }} />
-          </linearGradient>
-          <clipPath id={`${uid}-past`}>
-            <rect x="-1" y="-10" width={index === null ? 102 : xActive + 1} height="120" />
-          </clipPath>
-        </defs>
-        <path
-          d={area}
-          fill={`url(#${uid}-wash)`}
-          style={{ d: `path("${area}")`, transition: morph } as React.CSSProperties}
-        />
-        {/* The future of a scrubbed point dims; the past stays full strength. */}
-        <path
-          d={line}
-          fill="none"
-          stroke="var(--ink)"
-          strokeOpacity={index === null ? 0 : 0.2}
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-          style={{ d: `path("${line}")`, transition: morph } as React.CSSProperties}
-        />
-        <path
-          d={line}
-          clipPath={`url(#${uid}-past)`}
-          fill="none"
-          stroke="var(--ink)"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-          style={{ d: `path("${line}")`, transition: morph } as React.CSSProperties}
-        />
-      </svg>
-
-      {index === null ? (
-        <span
-          aria-hidden
-          className="absolute size-2.5 -translate-1/2 transition-[top] duration-(--duration-move) ease-out"
-          style={{ left: "100%", top: `${y(points[POINTS - 1].v)}%` }}
-        >
-          <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60" />
-          <span className="absolute inset-0 rounded-full bg-accent shadow-[0_0_0_2px_var(--canvas),0_0_0_3px_rgb(0_0_0/0.08)]" />
-        </span>
-      ) : (
-        <>
-          <span aria-hidden className="absolute inset-y-0 w-px bg-line-strong" style={{ left: `${xActive}%` }} />
-          <span
-            aria-hidden
-            className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--canvas)]"
-            style={{ left: `${xActive}%`, top: `${y(point.v)}%` }}
-          />
-        </>
-      )}
+      {lineMarks()}
     </div>
   );
+
+  /** The line, its wash and the markers. A plain function, so the paths persist and morph. */
+  function lineMarks() {
+    return (
+      <>
+        <svg
+          aria-hidden
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="absolute inset-0 size-full overflow-visible"
+        >
+          <defs>
+            <linearGradient id={`${uid}-wash`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" style={{ stopColor: "var(--ink)", stopOpacity: "var(--chart-wash-top, 0.1)" }} />
+              <stop offset="1" style={{ stopColor: "var(--ink)", stopOpacity: "var(--chart-wash-bottom, 0)" }} />
+            </linearGradient>
+            <clipPath id={`${uid}-past`}>
+              <rect x="-1" y="-10" width={index === null ? 102 : xActive + 1} height="120" />
+            </clipPath>
+          </defs>
+          <path
+            d={area}
+            fill={`url(#${uid}-wash)`}
+            style={{ d: `path("${area}")`, transition: morph } as React.CSSProperties}
+          />
+          {/* The future of a scrubbed point dims; the past stays full strength. */}
+          <path
+            d={line}
+            fill="none"
+            strokeOpacity={index === null ? 0 : 0.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            style={{ d: `path("${line}")`, transition: morph, ...stroke } as React.CSSProperties}
+          />
+          <path
+            d={line}
+            clipPath={`url(#${uid}-past)`}
+            fill="none"
+
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            style={{ d: `path("${line}")`, transition: morph, ...stroke } as React.CSSProperties}
+          />
+        </svg>
+
+        {index === null ? (
+          <span
+            aria-hidden
+            className="absolute size-2.5 -translate-1/2 transition-[top] duration-(--duration-move) ease-out mono:hidden"
+            style={{ left: "100%", top: `${y(points[POINTS - 1].v)}%` }}
+          >
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60" />
+            <span className="absolute inset-0 rounded-full bg-accent shadow-[0_0_0_2px_var(--chart-ground,var(--canvas)),0_0_0_3px_rgb(0_0_0/0.08)]" />
+          </span>
+        ) : (
+          <>
+            <span aria-hidden className="absolute inset-y-0 w-px bg-line-strong" style={{ left: `${xActive}%` }} />
+            <span
+              aria-hidden
+              className="absolute size-2.5 -translate-1/2 rounded-full bg-ink shadow-[0_0_0_2px_var(--chart-ground,var(--canvas))] mono:hidden"
+              style={{ left: `${xActive}%`, top: `${y(point.v)}%` }}
+            />
+          </>
+        )}
+      </>
+    );
+  }
 }

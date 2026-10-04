@@ -130,7 +130,7 @@ export function SendSheet({ open, contactId, onClose }: { open: boolean; contact
                   className={`h-7 rounded-full px-3 text-meta font-medium tabular-nums transition-[background-color,color,transform] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] ${
                     amount === q
                       ? "bg-ink text-canvas"
-                      : "bg-panel text-muted shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink"
+                      : "bg-panel text-muted shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink mono:bg-surface mono:shadow-none"
                   }`}
                 >
                   ${q}
@@ -190,7 +190,8 @@ export function SendSheet({ open, contactId, onClose }: { open: boolean; contact
               <InfoRow label="Balance after">{money(state.balance - cents)}</InfoRow>
             </InfoList>
             <div className="mt-auto flex flex-col items-center gap-2 pt-6">
-              <div data-autofocus className="w-full">
+              {/* Mono keeps red off buttons: the hold fills in ink, like the Send tile. */}
+              <div data-autofocus className="w-full mono:[--accent-ink:var(--canvas)] mono:[--accent:var(--ink)]">
                 <HoldToConfirm tone="accent" size="lg" duration={1000} onConfirm={send} hint="Press and hold to send">
                   Hold to send {money(cents)}
                 </HoldToConfirm>

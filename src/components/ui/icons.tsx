@@ -180,6 +180,15 @@ export const Sun = (p: IconProps) => (
   </Icon>
 );
 
+/** A 3×3 LED matrix, for the mono theme. */
+export const Dots = (p: IconProps) => (
+  <Icon {...p}>
+    <g fill="currentColor" stroke="none">
+      {[4, 8, 12].map((y) => [4, 8, 12].map((x) => <circle key={`${x}-${y}`} cx={x} cy={y} r={1.15} />))}
+    </g>
+  </Icon>
+);
+
 export const Moon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M13.5 9.6A5.75 5.75 0 0 1 6.4 2.5a5.75 5.75 0 1 0 7.1 7.1Z" />
