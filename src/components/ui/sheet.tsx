@@ -155,7 +155,7 @@ function SheetPanel({
         tabIndex={-1}
         onKeyDown={onKeyDown}
         style={{ transform: "translate3d(0, 100%, 0)" }}
-        className={`absolute inset-x-0 bottom-0 z-30 flex flex-col rounded-t-xl bg-surface shadow-lg outline-none will-change-transform ${
+        className={`absolute inset-x-0 bottom-0 z-30 flex flex-col rounded-t-xl bg-surface shadow-lg outline-none will-change-transform mono:bg-canvas ${
           tall ? "h-[calc(100%-44px)]" : "max-h-[calc(100%-44px)]"
         }`}
       >

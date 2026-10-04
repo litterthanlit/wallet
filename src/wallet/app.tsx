@@ -108,7 +108,7 @@ function Shell() {
               <main
                 ref={main}
                 inert={!!sheet}
-                className="no-scrollbar relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-32"
+                className="no-scrollbar relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-32 mono:px-6"
               >
                 {/* Top padding lives inside the scroller so sticky headers pin flush to its edge. */}
                 <div

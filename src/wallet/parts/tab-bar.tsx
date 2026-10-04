@@ -14,7 +14,7 @@ const tabs: { value: Tab; label: string; Icon: ComponentType<SVGProps<SVGSVGElem
  * Primary navigation as a floating, frosted pill. One indicator springs
  * between items (position and width are separate springs, as in the
  * Segmented Control), so it stretches a little on the way. Mono drops the
- * icons for caps words, and the current tab takes the red signal dot.
+ * icons for caps words; the indicator alone marks the current tab.
  */
 export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab) => void; inert?: boolean }) {
   const list = useRef<HTMLDivElement>(null);
@@ -74,12 +74,6 @@ export function TabBar({ tab, onChange, inert }: { tab: Tab; onChange: (tab: Tab
                   }`}
                 >
                   <Icon className="size-4 mono:hidden" />
-                  <span
-                    aria-hidden
-                    className={`hidden size-1.5 rounded-full bg-accent transition-[opacity,scale] duration-(--duration-enter) ease-out mono:block ${
-                      current ? "scale-100 opacity-100" : "scale-50 opacity-0"
-                    }`}
-                  />
                   {label}
                 </button>
               </li>

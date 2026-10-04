@@ -12,12 +12,12 @@ const sizes = {
 
 type Size = keyof typeof sizes;
 
-/** A person: initials on a panel disc with a hairline ring. */
+/** A person: initials on a panel disc with a hairline ring (mono: a faint tint, no ring). */
 export function Avatar({ name, size = "md", className = "" }: { name: string; size?: Size; className?: string }) {
   return (
     <span
       aria-hidden
-      className={`inline-grid shrink-0 select-none place-items-center rounded-full bg-panel font-medium text-ink shadow-[inset_0_0_0_1px_var(--line)] ${sizes[size]} ${className}`}
+      className={`inline-grid shrink-0 select-none place-items-center rounded-full bg-panel font-medium text-ink shadow-[inset_0_0_0_1px_var(--line)] mono:bg-ink/5 mono:shadow-none ${sizes[size]} ${className}`}
     >
       {initials(name)}
     </span>
@@ -42,7 +42,7 @@ export function TxnAvatar({ txn, size = "md" }: { txn: Txn; size?: Size }) {
   return (
     <span
       aria-hidden
-      className={`inline-grid shrink-0 place-items-center rounded-full bg-panel text-ink shadow-[inset_0_0_0_1px_var(--line)] ${sizes[size]}`}
+      className={`inline-grid shrink-0 place-items-center rounded-full bg-panel text-ink shadow-[inset_0_0_0_1px_var(--line)] mono:bg-ink/5 mono:shadow-none ${sizes[size]}`}
     >
       <Glyph className={size === "lg" || size === "xl" ? "size-5" : "size-4"} />
     </span>

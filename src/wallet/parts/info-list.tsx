@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import { CopyButton } from "@/components/ui/copy-button";
 
-/** Label/value pairs on a panel tint: flat information, so no raised card. */
+/** Label/value pairs on a panel tint: flat information, so no raised card. Mono: a white card, no ring. */
 export function InfoList({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <dl className={`divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] ${className}`}>
+    <dl
+      className={`divide-y divide-line rounded-xl bg-panel shadow-[inset_0_0_0_1px_var(--line)] mono:bg-surface mono:shadow-none ${className}`}
+    >
       {children}
     </dl>
   );

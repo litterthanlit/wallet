@@ -130,7 +130,7 @@ export function SendSheet({ open, contactId, onClose }: { open: boolean; contact
                   className={`h-7 rounded-full px-3 text-meta font-medium tabular-nums transition-[background-color,color,transform] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] ${
                     amount === q
                       ? "bg-ink text-canvas"
-                      : "bg-panel text-muted shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink"
+                      : "bg-panel text-muted shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink mono:bg-surface mono:shadow-none"
                   }`}
                 >
                   ${q}

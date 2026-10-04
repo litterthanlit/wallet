@@ -37,7 +37,7 @@ export function PaymentCard({ card, seed = 0 }: { card: Card; seed?: number }) {
       </span>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)]"
+        className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgb(0_0_0/0.08)] mono:hidden"
       />
 
       <span aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3.5">

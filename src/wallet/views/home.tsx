@@ -6,20 +6,28 @@ import { ThemeToggle, useTheme } from "@/components/ui/theme-toggle";
 import { Button, IconButton, SectionLabel } from "@/design-system";
 import { INITIAL_BALANCE, user } from "../data";
 import { greeting, money } from "../format";
-import { history, periodStart, periods, pointLabel, rangeStartLabel, type Period, type Point } from "../history";
+import {
+  balanceSummary,
+  history,
+  pastLabel,
+  periodStart,
+  periods,
+  pointLabel,
+  rangeStartLabel,
+  type Period,
+  type Point,
+} from "../history";
 import { Avatar } from "../parts/avatar";
 import { BalanceChart } from "../parts/balance-chart";
-import { BalanceWidget } from "../parts/balance-widget";
+import { BalanceDelta, BalanceFigure } from "../parts/balance-figure";
 import { TxnRow } from "../parts/txn-row";
 import { useUI, useWallet } from "../store";
 import { caps } from "../theme";
 
-const since: Record<Period, string> = { week: "past week", month: "past month", year: "past year" };
-
-// Mono makes the tiles a little taller, to match the widgets around them.
+// Mono: taller tiles, and hover darkens the fill instead of drawing an outline.
 const tile =
   "flex h-[72px] flex-col items-center justify-center gap-1.5 rounded-lg text-meta font-medium transition-[background-color,box-shadow,transform,opacity] duration-(--duration-exit) ease-out hover:duration-(--duration-enter) active:scale-[0.97] mono:h-20 mono:gap-2";
-const tileSecondary = `${tile} bg-surface text-ink shadow-sm hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)]`;
+const tileSecondary = `${tile} bg-surface text-ink shadow-sm hover:shadow-[0_0_0_1px_var(--line-strong),0_1px_2px_rgb(0_0_0/0.04)] mono:hover:bg-panel mono:hover:shadow-sm`;
 
 export function HomeView() {
   const { state, dispatch } = useWallet();
@@ -35,7 +43,9 @@ export function HomeView() {
   const delta = shown - start;
   const up = delta >= 0;
   const percent = Math.abs((delta / start) * 100).toFixed(1);
-  const summary = `Your balance went ${state.balance >= start ? "up" : "down"} from ${money(start)} to ${money(state.balance)} over the ${since[period]}.`;
+  const summary = balanceSummary(period, start, state.balance);
+  // Mono's hero has no chart, so it measures against the month.
+  const monthStart = periodStart("month", INITIAL_BALANCE);
 
   return (
     <div className="flex flex-col">
@@ -56,20 +66,23 @@ export function HomeView() {
       </header>
 
       {mono ? (
-        <BalanceWidget
-          period={period}
-          onPeriod={setPeriod}
-          points={points}
-          scrub={scrub}
-          onScrub={setScrub}
-          shown={shown}
-          balance={state.balance}
-          start={start}
-          hidden={state.hidden}
-          summary={summary}
-          since={since[period]}
-          now={now}
-        />
+        // Mono: the figure alone on the ground. The chart lives on Activity.
+        <section aria-labelledby="balance-label" className="mt-14">
+          <h1 id="balance-label" className={`text-meta text-muted ${caps}`}>
+            Balance
+          </h1>
+          <div className="mt-4">
+            <BalanceFigure value={state.balance} hidden={state.hidden} size="lg" />
+          </div>
+          <div className="mt-4">
+            <BalanceDelta
+              delta={state.balance - monthStart}
+              start={monthStart}
+              hidden={state.hidden}
+              note={pastLabel.month}
+            />
+          </div>
+        </section>
       ) : (
         <>
           <section aria-labelledby="balance-label" className="mt-9">
@@ -96,7 +109,7 @@ export function HomeView() {
                 <span className="sr-only">{up ? "Up" : "Down"} </span>
                 {state.hidden ? "••••" : money(Math.abs(delta))} · {percent}%
               </span>
-              <span className="text-muted">{scrub ? `since ${rangeStartLabel(period, now)}` : since[period]}</span>
+              <span className="text-muted">{scrub ? `since ${rangeStartLabel(period, now)}` : pastLabel[period]}</span>
             </p>
           </section>
 
@@ -118,7 +131,7 @@ export function HomeView() {
         </>
       )}
 
-      <section aria-label="Move money" className="mt-8 grid grid-cols-3 gap-2 mono:mt-3 mono:gap-3">
+      <section aria-label="Move money" className="mt-8 grid grid-cols-3 gap-2 mono:mt-12 mono:gap-3">
         <button
           type="button"
           aria-keyshortcuts="S"
@@ -148,19 +161,17 @@ export function HomeView() {
         </button>
       </section>
 
-      <section
-        aria-labelledby="recent-heading"
-        className="mt-10 mono:mt-3 mono:rounded-xl mono:bg-surface mono:px-6 mono:pb-4 mono:pt-5 mono:shadow-sm"
-      >
+      <section aria-labelledby="recent-heading" className="mt-10 mono:mt-12">
         <div className="flex items-center justify-between">
-          <SectionLabel id="recent-heading" className={`mono:text-meta mono:text-ink ${caps}`}>
+          <SectionLabel id="recent-heading" className={`mono:text-meta ${caps}`}>
             Recent activity
           </SectionLabel>
           <Button variant="ghost" size="sm" onClick={() => setTab("activity")} className={`-mr-2.5 ${caps}`}>
             See all
           </Button>
         </div>
-        <ul className="mt-1">
+        {/* Mono groups the rows on one white card, like an inset list. */}
+        <ul className="mt-1 mono:mt-2 mono:rounded-xl mono:bg-surface mono:px-4 mono:py-2 mono:shadow-sm">
           {state.txns.slice(0, 4).map((txn, i) => (
             <TxnRow key={txn.id} txn={txn} style={{ animationDelay: `calc(${i} * var(--stagger))` }} />
           ))}

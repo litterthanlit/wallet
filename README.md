@@ -32,11 +32,11 @@ npm run build:artifact   # one self-contained HTML file → artifact/litt-wallet
   its details, with Send again for people.
 - **Feedback.** Every action lands in the Toast Stack. A few seconds after load, Ada pays you back, so you can watch
   the ticker and a toast arrive together.
-- **Mono theme.** A third, quieter light theme. A grey ground with pale, hairline widgets; Geist for reading and
-  Geist Mono for small caps labels. The balance becomes one widget: period as words in the corner, the figure with
-  its symbol and cents set small, and a fine grey line over a soft grey wash. Red is the one
-  accent: the Send tile, hold to send, live dots and the active tab. Card art keeps its colour, the only vivid
-  thing on the screen.
+- **Mono theme.** A third, quieter light theme. White cards on a light grey with no outlines, wide margins, Geist for
+  reading and Geist Mono for small caps labels. Home is just the balance (symbol and cents set small), the three
+  actions and recent activity. The balance chart moves to Activity: a fine grey line over a soft wash, with the
+  period as words in the corner. Choices are marked by a soft sliding pill, never a dot. Red is the one accent: the
+  Send tile, hold to send and pending. Card art keeps its colour, the only vivid thing on the screen.
 - **Keyboard.** `1` `2` `3` switch tabs, `S` send, `R` request, `T` top up, `H` hide the balance, `Esc` closes a sheet.
 
 ## Design system
