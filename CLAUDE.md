@@ -18,7 +18,7 @@ A digital wallet prototype on the litt design system (source: github.com/littert
   dot: "Metro Transit (Pending)".
 - Mono theme (`data-theme="mono"`, Nothing OS-style): tokens in `src/app.css`, shape changes via the `mono:` variant,
   caps labels via `caps` from `src/wallet/theme.ts` (meta-size labels only, never titles or sentences). In mono,
-  `accent` is red and still a fill only: the primary action and status dots; success uses ink. No outlines: group
+  `accent` is red and a status dot only (pending, toasts); actions and success use ink, never red. No outlines: group
   with white cards on the grey ground and space, not rings or dividers. Mark a choice with a pill (`TextTabs`), not
   a dot. 24px page gutter, 48px between sections. Check new UI in all three themes.
 - Don't override a component's own position or size utilities through `className`. Tailwind applies the

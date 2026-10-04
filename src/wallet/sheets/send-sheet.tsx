@@ -190,7 +190,8 @@ export function SendSheet({ open, contactId, onClose }: { open: boolean; contact
               <InfoRow label="Balance after">{money(state.balance - cents)}</InfoRow>
             </InfoList>
             <div className="mt-auto flex flex-col items-center gap-2 pt-6">
-              <div data-autofocus className="w-full">
+              {/* Mono keeps red off buttons: the hold fills in ink, like the Send tile. */}
+              <div data-autofocus className="w-full mono:[--accent-ink:var(--canvas)] mono:[--accent:var(--ink)]">
                 <HoldToConfirm tone="accent" size="lg" duration={1000} onConfirm={send} hint="Press and hold to send">
                   Hold to send {money(cents)}
                 </HoldToConfirm>

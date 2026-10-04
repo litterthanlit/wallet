@@ -30,8 +30,8 @@
 
 /*
  * Mono: a third, light theme. A grey ground with pale widgets, Geist for
- * reading and Geist Mono for small caps labels, and red as the one accent:
- * the primary action and live dots. Opt-in only; it never follows the OS.
+ * reading and Geist Mono for small caps labels, ink for actions, and red only
+ * as a status dot. Opt-in only; it never follows the OS.
  * `:root[...]` outranks the OS-dark block in tokens.css, so the choice holds
  * on a dark system too.
  */
@@ -46,7 +46,7 @@
   --subtle: #a6a6a6;
   --line: rgb(0 0 0 / 0.06);
   --line-strong: rgb(0 0 0 / 0.12);
-  /* Red is a fill for signal dots, like the lime it replaces. */
+  /* Red is a fill for status dots only, like the lime it replaces; never a button. */
   --accent: #d71921;
   --accent-ink: #ffffff;
   --accent-strong: #1a1a1a;

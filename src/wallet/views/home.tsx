@@ -136,7 +136,7 @@ export function HomeView() {
           type="button"
           aria-keyshortcuts="S"
           onClick={() => openSheet({ kind: "send" })}
-          className={`${tile} bg-ink text-canvas hover:opacity-85 mono:bg-accent mono:text-accent-ink`}
+          className={`${tile} bg-ink text-canvas hover:opacity-85`}
         >
           <ArrowUpRight />
           Send
